@@ -18,9 +18,11 @@ namespace RF5_CustomRecipeEditor
             }
         }
 
-        ImmutableDictionary<ushort, ItemDataRow> items;
+        ImmutableDictionary<ushort, ItemDataRow> itemsDict;
+        ImmutableDictionary<ushort, int> itemIndex;
+        ImmutableArray<ItemDataRow> itemsArray;
 
-        public IList<ItemDataRow> Items => items.Values.ToList();
+        public IList<ItemDataRow> Items => itemsArray;
 
         ItemDataTable()
         {
@@ -40,13 +42,23 @@ namespace RF5_CustomRecipeEditor
                     if (!csvReader.ReadHeader())
                         throw new Exception();
 
-                    items = csvReader.GetRecords<ItemDataRow>().ToImmutableDictionary(x => x.id);
+                    itemsDict = csvReader.GetRecords<ItemDataRow>().ToImmutableDictionary(x => x.id);
+                    itemsArray = itemsDict.Values.ToImmutableArray();
                 }
             }
+
+            itemIndex = itemsArray
+                .Select((x, i) => (index: i, id: x.id))
+                .ToImmutableDictionary(t => t.id, t => t.index);
         }
 
-        public bool Contains (ushort id) => items.ContainsKey(id);
+        public bool Contains (ushort id) => itemsDict.ContainsKey(id);
 
-        public ItemDataRow Get(ushort id) => items[id];
+        public ItemDataRow Get(ushort id) => itemsDict[id];
+
+        public int IndexOf(ushort id)
+        {
+            return itemIndex[id];
+        }
     }
 }

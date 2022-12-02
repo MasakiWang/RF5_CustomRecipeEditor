@@ -2,6 +2,8 @@
 
 public sealed class ItemDataRow
 {
+    private string displayName;
+
     [Name("id")]
     public ushort id { get; set; }
 
@@ -12,10 +14,21 @@ public sealed class ItemDataRow
     public string item_name { get; set; }
 
     [Ignore]
+    public string Name
+    {
+        get
+        {
+            if (null == displayName) 
+                displayName = $"[{id}] {item_name} | {english_name}";
+            return displayName ;
+        }
+    }
+
+    [Ignore]
     public string json_file_name => english_name.Replace(" ", string.Empty) + ".json";
 
     public override string ToString()
     {
-        return $"[{id}] {item_name} | {english_name}";
+        return Name;
     }
 }

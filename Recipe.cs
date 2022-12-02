@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RF5_CustomRecipeEditor;
 
 [JsonObject]
 public sealed class Recipe
@@ -8,6 +9,7 @@ public sealed class Recipe
 
     [JsonRequired]
     [JsonProperty]
+    [JsonConverter(typeof(CraftCategoryIdConverter))]
     public byte CraftCategoryID
     {
         get => (byte)CraftCategoryId;
@@ -16,12 +18,13 @@ public sealed class Recipe
 
     [JsonRequired]
     [JsonProperty]
+    [JsonConverter(typeof(ItemIDConverter))]
     public ushort ResultItemID { get; set; }
 
     [JsonRequired]
-    [JsonProperty]
+    [JsonProperty(ItemConverterType = typeof(ItemIDConverter))]
     public List<ushort> IngredientItemIDs { get; set; } = new List<ushort>();
 
     [JsonProperty]
-    public byte SkillLevel { get; set; }
+    public byte SkillLevel { get; set; } = 1;
 }

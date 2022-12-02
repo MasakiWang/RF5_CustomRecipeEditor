@@ -1,79 +1,134 @@
-using CsvHelper;
-using CsvHelper.Configuration;
-using Newtonsoft.Json;
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
-using System.Globalization;
+using System.ComponentModel;
 
 namespace RF5_CustomRecipeEditor
 {
     public partial class MainForm : Form
     {
-        List<Recipe> currentJsonRecipe;
+        string currentRecipeFilePath;
+        RecipeAddButton recipeAddButton;
+        List<RecipeControl> recipeControls = new List<RecipeControl>();
 
         public MainForm()
         {
             InitializeComponent();
-            InitAppConfig();
-            InitComboBoxResultItemData();
+
+            if (null == recipeAddButton)
+            {
+                recipeAddButton = new RecipeAddButton();
+                recipeAddButton.ClickAdd += (_, _) =>
+                {
+                    var newRecipe = new Recipe();
+
+                    RecipeFile.Instance.AddRecipe(newRecipe);
+
+                    AddRecipe(newRecipe);
+                };
+            }
+            flowLayoutPanelRecipes.Controls.Add(recipeAddButton);
         }
 
-        void InitAppConfig()
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(RF5_CustomRecipeEditor)) + $"{nameof(AppConfig)}.json";
+            if (keyData == (Keys.Control | Keys.S))
+                Save();
 
-            if (File.Exists(path))
-                AppConfig.Instance = JsonConvert.DeserializeObject<AppConfig>(File.ReadAllText(path));
-            
-            if (null == AppConfig.Instance)
-                AppConfig.Instance = new AppConfig();
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
-            while (string.IsNullOrWhiteSpace(AppConfig.Instance.Workspace) || !Directory.Exists(AppConfig.Instance.Workspace))
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+        }
+
+        void ClearRecipe()
+        {
+            flowLayoutPanelRecipes.SuspendLayout();
+            foreach (var c in flowLayoutPanelRecipes.Controls.OfType<RecipeControl>())
+                c.Visible = false;
+            flowLayoutPanelRecipes.ResumeLayout();
+        }
+
+        static Recipe[] tmpArray = new Recipe[1];
+        void AddRecipe(Recipe recipe)
+        {
+            tmpArray[0] = recipe;
+
+            AddRecipes(tmpArray);
+        }
+
+        void AddRecipes(IList<Recipe> recipes)
+        {
+            flowLayoutPanelRecipes.SuspendLayout();
+
+            int i = 0;
+            for (; i < recipes.Count; i++)
             {
-                using (var fbd = new FolderBrowserDialog())
+                if (i >= recipeControls.Count)
                 {
-                    DialogResult result;
-                    do
-                    {
-                        result = fbd.ShowDialog();
-                    } while (result != DialogResult.OK);
+                    var newControl = new RecipeControl();
 
-                    AppConfig.Instance.Workspace = fbd.SelectedPath;
+                    recipeControls.Add(newControl);
+                    flowLayoutPanelRecipes.Controls.Add(newControl);
+                }
 
-                    File.WriteAllText(path, JsonConvert.SerializeObject(AppConfig.Instance, Formatting.Indented));
+                recipeControls[i].Visible = true;
+                recipeControls[i].SetViewModel(new RecipeViewModel(recipes[i]));
+            }
+
+            for (; i < recipeControls.Count; i++)
+                recipeControls[i].Visible = false;
+
+            if (flowLayoutPanelRecipes.Controls[flowLayoutPanelRecipes.Controls.Count - 1] != recipeAddButton)
+                flowLayoutPanelRecipes.Controls.Add(recipeAddButton);
+
+            flowLayoutPanelRecipes.ResumeLayout();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            currentRecipeFilePath = string.Empty;
+            RecipeFile.Instance.New();
+            ClearRecipe();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "(*.json)|*.json";
+
+                if (DialogResult.OK != ofd.ShowDialog())
+                    return;
+
+                currentRecipeFilePath = ofd.FileName;
+            }
+
+            RecipeFile.Instance.Load(currentRecipeFilePath);
+            ClearRecipe();
+            AddRecipes(RecipeFile.Instance.GetRecipes());
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        void Save()
+        {
+            if (string.IsNullOrEmpty(currentRecipeFilePath) || !File.Exists(currentRecipeFilePath))
+            {
+                using (var sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = "(*.json)|*.json";
+
+                    if (DialogResult.OK != sfd.ShowDialog())
+                        return;
+
+                    currentRecipeFilePath = sfd.FileName;
                 }
             }
-        }
 
-        private void InitComboBoxResultItemData()
-        {
-            comboBoxResultItemData.DataSource = ItemDataTable.Instance.Items;
-        }
-
-        private void comboBoxResultItemData_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            flowLayoutPanelRecipes.Controls.Clear();
-
-            var selectItem = (comboBoxResultItemData.SelectedItem as ItemDataRow);
-
-            if (0 == selectItem?.id)
-                return;
-
-            var recipes = RecipeDatabase.Instance.GetRecipes(selectItem.id);
-            foreach (var recipe in recipes)
-                flowLayoutPanelRecipes.Controls.Add(new RecipeControl(new RecipeViewModel(recipe)));
-
-            {
-                var button = new RecipeAddButton();
-                button.ClickAdd += (_, _) =>
-                {
-                    var button = flowLayoutPanelRecipes.Controls[flowLayoutPanelRecipes.Controls.Count - 1];
-                    flowLayoutPanelRecipes.Controls.RemoveAt(flowLayoutPanelRecipes.Controls.Count - 1);
-                    flowLayoutPanelRecipes.Controls.Add(new RecipeControl(new RecipeViewModel(new Recipe() { ResultItemID = selectItem.id })));
-                    flowLayoutPanelRecipes.Controls.Add(button);
-                };
-                flowLayoutPanelRecipes.Controls.Add(button);
-            }
+            RecipeFile.Instance.Save(currentRecipeFilePath);
         }
     }
 }
