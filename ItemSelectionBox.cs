@@ -36,28 +36,39 @@ namespace RF5_CustomRecipeEditor
 
         private new void Hide()
         {
-            MainForm.Instance!.Enabled = true;
             MainForm.Instance!.Activate();
             this.Visible = false;
         }
 
         public static async Task<(DialogResult result, ItemDataRow? value)> Show(Control parent, ushort id)
         {
-            MainForm.Instance!.Enabled = false;
+            MainForm.Instance!.Activated += OnUnfocus;
+            MainForm.Instance!.Enter += OnUnfocus;
+            MainForm.Instance!.GotFocus += OnUnfocus;
 
             Instance.comboBox.SelectedIndex = ItemDataTable.Instance.IndexOf(id);
-            var pos = parent.PointToScreen(Point.Empty);
-            pos.Offset(-14, -12);
-            Instance.Location = pos;
             Instance.Show();
 
             while (Instance.Visible)
-                await Task.Delay(16);
+            {
+                var pos = parent.PointToScreen(Point.Empty);
+                pos.Offset(-14, -12);
+                Instance.Location = pos;
+                await Task.Delay(4);
+            }
 
+            MainForm.Instance!.Activated -= OnUnfocus;
+            MainForm.Instance!.Enter -= OnUnfocus;
+            MainForm.Instance!.GotFocus -= OnUnfocus;
             var result = Instance.DialogResult;
             var value = Instance.Value;
 
             return (result, value);
+        }
+
+        static void OnUnfocus(object sender, EventArgs args)
+        {
+            Instance.Activate();
         }
     }
 }
