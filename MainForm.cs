@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Input;
+using System.Security.Cryptography;
 
 namespace RF5_CustomRecipeEditor
 {
@@ -141,12 +142,13 @@ namespace RF5_CustomRecipeEditor
                 {
                     using (var sfd = new SaveFileDialog())
                     {
+                        sfd.FileName = currentRecipeFilePath;
                         sfd.Filter = "(*.json)|*.json";
 
                         if (DialogResult.OK != sfd.ShowDialog())
                             return;
 
-                        this.Text = currentRecipeFilePath = path = sfd.FileName;
+                        this.Text = Path.GetFileName(currentRecipeFilePath = path = sfd.FileName);
                     }
                 }
                 while (string.IsNullOrEmpty(path));
@@ -159,12 +161,13 @@ namespace RF5_CustomRecipeEditor
         {
             using (var ofd = new OpenFileDialog())
             {
+                ofd.FileName = currentRecipeFilePath;
                 ofd.Filter = "(*.json)|*.json";
 
                 if (DialogResult.OK != ofd.ShowDialog())
                     return;
 
-                this.Text = currentRecipeFilePath = ofd.FileName;
+                this.Text = Path.GetFileName(currentRecipeFilePath = ofd.FileName);
             }
 
             RecipeFile.Instance.Load(currentRecipeFilePath);
