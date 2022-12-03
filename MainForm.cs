@@ -1,5 +1,4 @@
- using System.ComponentModel;
-using System.Windows.Forms;
+using CommunityToolkit.Mvvm.Input;
 
 namespace RF5_CustomRecipeEditor
 {
@@ -26,26 +25,12 @@ namespace RF5_CustomRecipeEditor
                 AddRecipe(newRecipe);
             };
             flowLayoutPanelRecipes.Controls.Add(recipeAddButton);
+            this.saveAsToolStripMenuItem.Command = new RelayCommand(() => SaveFile(string.Empty));
+            this.saveToolStripMenuItem.Command = new RelayCommand(() => SaveFile(currentRecipeFilePath));
+            this.openToolStripMenuItem.Command = new RelayCommand(LoadFile);
+            this.newToolStripMenuItem.Command = new RelayCommand(NewRecipe);
 
             this.Text = "Untitled recipe";
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if ((Keys.Control | Keys.S) == (keyData & (Keys.Control | Keys.S)))
-            {
-                if (keyData.HasFlag(Keys.Shift))
-                    Save(string.Empty);
-                else
-                    Save(currentRecipeFilePath);
-            }
-
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
         }
 
         void ClearRecipe()
@@ -140,7 +125,7 @@ namespace RF5_CustomRecipeEditor
             flowLayoutPanelRecipes.ResumeLayout();
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        void NewRecipe()
         {
             currentRecipeFilePath = string.Empty;
             this.Text = "Untitled recipe";
@@ -148,29 +133,7 @@ namespace RF5_CustomRecipeEditor
             ClearRecipe();
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "(*.json)|*.json";
-
-                if (DialogResult.OK != ofd.ShowDialog())
-                    return;
-
-                this.Text = currentRecipeFilePath = ofd.FileName;
-            }
-
-            RecipeFile.Instance.Load(currentRecipeFilePath);
-            ClearRecipe();
-            AddRecipes(RecipeFile.Instance.GetRecipes());
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Save(currentRecipeFilePath);
-        }
-
-        void Save(string path)
+        void SaveFile(string path)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
             {
@@ -190,6 +153,23 @@ namespace RF5_CustomRecipeEditor
             }
 
             RecipeFile.Instance.Save(path);
+        }
+
+        void LoadFile()
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "(*.json)|*.json";
+
+                if (DialogResult.OK != ofd.ShowDialog())
+                    return;
+
+                this.Text = currentRecipeFilePath = ofd.FileName;
+            }
+
+            RecipeFile.Instance.Load(currentRecipeFilePath);
+            ClearRecipe();
+            AddRecipes(RecipeFile.Instance.GetRecipes());
         }
     }
 }
