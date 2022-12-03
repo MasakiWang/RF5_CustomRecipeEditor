@@ -1,4 +1,6 @@
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace RF5_CustomRecipeEditor
 {
@@ -186,6 +188,39 @@ namespace RF5_CustomRecipeEditor
             RecipeFile.Instance.Load(currentRecipeFilePath);
             ClearRecipe();
             AddRecipes(RecipeFile.Instance.GetRecipes());
+        }
+
+        private void combineRecipeJsonsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Multiselect = true;
+                ofd.RestoreDirectory = true;
+                ofd.Filter = "(*.json)|*.json";
+
+                if (DialogResult.OK != ofd.ShowDialog())
+                    return;
+
+                if (1 >= ofd.FileNames.Length)
+                    return;
+
+                var combinedRecipes = ofd.FileNames
+                    .SelectMany(x => JsonConvert.DeserializeObject<List<Recipe>>(File.ReadAllText(x)) ?? new List<Recipe>())
+                    .OrderBy(x => x.ResultItemID)
+                    .ToArray();
+
+                using (var sfd = new SaveFileDialog())
+                {
+                    sfd.RestoreDirectory = true;
+                    sfd.Filter = "(*.json)|*.json";
+
+                    if (DialogResult.OK != sfd.ShowDialog()) 
+                        return;
+
+                    var jsonString = JsonConvert.SerializeObject(combinedRecipes);
+                    File.WriteAllText(sfd.FileName, jsonString);
+                }
+            }
         }
     }
 }

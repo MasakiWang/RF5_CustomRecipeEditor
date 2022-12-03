@@ -35,6 +35,8 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.utilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.combineRecipeJsonsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,7 +54,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.utilityToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1001, 24);
@@ -99,6 +102,21 @@
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             // 
+            // utilityToolStripMenuItem
+            // 
+            this.utilityToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.combineRecipeJsonsToolStripMenuItem});
+            this.utilityToolStripMenuItem.Name = "utilityToolStripMenuItem";
+            this.utilityToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.utilityToolStripMenuItem.Text = "Utility";
+            // 
+            // combineRecipeJsonsToolStripMenuItem
+            // 
+            this.combineRecipeJsonsToolStripMenuItem.Name = "combineRecipeJsonsToolStripMenuItem";
+            this.combineRecipeJsonsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.combineRecipeJsonsToolStripMenuItem.Text = "Combine recipe Jsons";
+            this.combineRecipeJsonsToolStripMenuItem.Click += new System.EventHandler(this.combineRecipeJsonsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -126,5 +144,7 @@
         private ToolStripMenuItem openToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
+        private ToolStripMenuItem utilityToolStripMenuItem;
+        private ToolStripMenuItem combineRecipeJsonsToolStripMenuItem;
     }
 }
