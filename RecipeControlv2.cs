@@ -26,6 +26,10 @@ namespace RF5_CustomRecipeEditor
             }.ToImmutableArray();
 
             this.comboBoxCategory.DataSource = Enum.GetValues(typeof(CraftCategoryId));
+            this.comboBoxCategory.MouseWheel += (_, args) =>
+            {
+                ((HandledMouseEventArgs)args).Handled = !this.comboBoxCategory.Focused;
+            };
             this.comboBoxCategory.SelectedIndexChanged += (_, _) =>
             {
                 if (initailzing)

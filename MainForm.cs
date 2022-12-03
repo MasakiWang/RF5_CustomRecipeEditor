@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
-using System.IO;
 
 namespace RF5_CustomRecipeEditor
 {
@@ -31,6 +30,7 @@ namespace RF5_CustomRecipeEditor
                 AddRecipe(newRecipe);
             };
             flowLayoutPanelRecipes.Controls.Add(recipeAddButton);
+            typeof(Control).GetProperty(nameof(DoubleBuffered), System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(flowLayoutPanelRecipes, true);
             this.saveAsToolStripMenuItem.Command = new RelayCommand(() => SaveFile(string.Empty));
             this.saveToolStripMenuItem.Command = new RelayCommand(() => SaveFile(currentRecipeFilePath));
             this.openToolStripMenuItem.Command = new RelayCommand(LoadFile);

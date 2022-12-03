@@ -58,50 +58,50 @@
             this.comboBoxCategory.Size = new System.Drawing.Size(228, 23);
             this.comboBoxCategory.TabIndex = 0;
             // 
-            // comboBoxMaterial1
+            // buttonMaterial1
             // 
             this.buttonMaterial1.Location = new System.Drawing.Point(83, 90);
-            this.buttonMaterial1.Name = "comboBoxMaterial1";
+            this.buttonMaterial1.Name = "buttonMaterial1";
             this.buttonMaterial1.Size = new System.Drawing.Size(228, 23);
             this.buttonMaterial1.TabIndex = 1;
             this.buttonMaterial1.UseVisualStyleBackColor = true;
             // 
-            // comboBoxMaterial2
+            // buttonMaterial2
             // 
             this.buttonMaterial2.Location = new System.Drawing.Point(83, 119);
-            this.buttonMaterial2.Name = "comboBoxMaterial2";
+            this.buttonMaterial2.Name = "buttonMaterial2";
             this.buttonMaterial2.Size = new System.Drawing.Size(228, 23);
             this.buttonMaterial2.TabIndex = 2;
             this.buttonMaterial2.UseVisualStyleBackColor = true;
             // 
-            // comboBoxMaterial3
+            // buttonMaterial3
             // 
             this.buttonMaterial3.Location = new System.Drawing.Point(83, 148);
-            this.buttonMaterial3.Name = "comboBoxMaterial3";
+            this.buttonMaterial3.Name = "buttonMaterial3";
             this.buttonMaterial3.Size = new System.Drawing.Size(228, 23);
             this.buttonMaterial3.TabIndex = 3;
             this.buttonMaterial3.UseVisualStyleBackColor = true;
             // 
-            // comboBoxMaterial4
+            // buttonMaterial4
             // 
             this.buttonMaterial4.Location = new System.Drawing.Point(83, 177);
-            this.buttonMaterial4.Name = "comboBoxMaterial4";
+            this.buttonMaterial4.Name = "buttonMaterial4";
             this.buttonMaterial4.Size = new System.Drawing.Size(228, 23);
             this.buttonMaterial4.TabIndex = 4;
             this.buttonMaterial4.UseVisualStyleBackColor = true;
             // 
-            // comboBoxMaterial5
+            // buttonMaterial5
             // 
             this.buttonMaterial5.Location = new System.Drawing.Point(83, 206);
-            this.buttonMaterial5.Name = "comboBoxMaterial5";
+            this.buttonMaterial5.Name = "buttonMaterial5";
             this.buttonMaterial5.Size = new System.Drawing.Size(228, 23);
             this.buttonMaterial5.TabIndex = 5;
             this.buttonMaterial5.UseVisualStyleBackColor = true;
             // 
-            // comboBoxMaterial6
+            // buttonMaterial6
             // 
             this.buttonMaterial6.Location = new System.Drawing.Point(83, 235);
-            this.buttonMaterial6.Name = "comboBoxMaterial6";
+            this.buttonMaterial6.Name = "buttonMaterial6";
             this.buttonMaterial6.Size = new System.Drawing.Size(228, 23);
             this.buttonMaterial6.TabIndex = 6;
             this.buttonMaterial6.UseVisualStyleBackColor = true;
@@ -210,10 +210,10 @@
             this.label9.TabIndex = 17;
             this.label9.Text = "Result Item";
             // 
-            // comboBoxResultItem
+            // buttonResultItem
             // 
             this.buttonResultItem.Location = new System.Drawing.Point(83, 3);
-            this.buttonResultItem.Name = "comboBoxResultItem";
+            this.buttonResultItem.Name = "buttonResultItem";
             this.buttonResultItem.Size = new System.Drawing.Size(228, 23);
             this.buttonResultItem.TabIndex = 16;
             this.buttonResultItem.UseVisualStyleBackColor = true;
@@ -238,7 +238,7 @@
             this.buttonDuplicate.UseVisualStyleBackColor = true;
             this.buttonDuplicate.Click += new System.EventHandler(this.buttonDuplicate_Click);
             // 
-            // RecipeControl
+            // RecipeControlv2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -262,9 +262,10 @@
             this.Controls.Add(this.buttonMaterial2);
             this.Controls.Add(this.buttonMaterial1);
             this.Controls.Add(this.comboBoxCategory);
+            this.DoubleBuffered = true;
             this.MaximumSize = new System.Drawing.Size(314, 292);
             this.MinimumSize = new System.Drawing.Size(314, 292);
-            this.Name = "RecipeControl";
+            this.Name = "RecipeControlv2";
             this.Size = new System.Drawing.Size(314, 292);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).EndInit();
             this.ResumeLayout(false);
