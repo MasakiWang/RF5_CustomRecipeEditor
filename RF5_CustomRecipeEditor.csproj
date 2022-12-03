@@ -16,6 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="RecipeControlv2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="ItemDataTable.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

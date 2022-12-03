@@ -40,10 +40,13 @@
             // 
             // flowLayoutPanelRecipes
             // 
+            this.flowLayoutPanelRecipes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanelRecipes.AutoScroll = true;
             this.flowLayoutPanelRecipes.Location = new System.Drawing.Point(12, 27);
             this.flowLayoutPanelRecipes.Name = "flowLayoutPanelRecipes";
-            this.flowLayoutPanelRecipes.Size = new System.Drawing.Size(977, 436);
+            this.flowLayoutPanelRecipes.Size = new System.Drawing.Size(977, 642);
             this.flowLayoutPanelRecipes.TabIndex = 2;
             // 
             // menuStrip1
@@ -100,11 +103,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1001, 475);
+            this.ClientSize = new System.Drawing.Size(1001, 681);
             this.Controls.Add(this.flowLayoutPanelRecipes);
             this.Controls.Add(this.menuStrip1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(720, 436);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);

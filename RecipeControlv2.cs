@@ -2,27 +2,27 @@
 
 namespace RF5_CustomRecipeEditor
 {
-    public partial class RecipeControl : UserControl
+    public partial class RecipeControlv2 : UserControl
     {
         public event EventHandler<Recipe> ClickDuplicate = delegate { };
         public event EventHandler<Recipe> ClickRemove = delegate { };
 
         RecipeViewModel? recipeViewModel = null;
-        readonly ImmutableArray<ComboBox> materialComboBoxes;
+        readonly ImmutableArray<Button> materialbuttons;
 
         volatile bool initailzing = false;
 
-        public RecipeControl()
+        public RecipeControlv2()
         {
             InitializeComponent();
-            this.materialComboBoxes = new []
+            this.materialbuttons = new []
             {
-                this.comboBoxMaterial1,
-                this.comboBoxMaterial2,
-                this.comboBoxMaterial3,
-                this.comboBoxMaterial4,
-                this.comboBoxMaterial5,
-                this.comboBoxMaterial6,
+                this.buttonMaterial1,
+                this.buttonMaterial2,
+                this.buttonMaterial3,
+                this.buttonMaterial4,
+                this.buttonMaterial5,
+                this.buttonMaterial6,
             }.ToImmutableArray();
 
             this.comboBoxCategory.DataSource = Enum.GetValues(typeof(CraftCategoryId));
@@ -34,9 +34,18 @@ namespace RF5_CustomRecipeEditor
                 this.recipeViewModel!.CraftCategoryId = (CraftCategoryId)this.comboBoxCategory.SelectedItem;
             };
 
-            this.comboBoxResultItem.DataSource = ItemDataTable.Instance.Items;
-            this.comboBoxResultItem.SelectedIndexChanged += (_, _) =>
-                this.recipeViewModel!.ResultItemID = ((ItemDataRow)this.comboBoxResultItem.SelectedItem).id;
+            this.buttonResultItem.Click += async (_, _) =>
+            {
+                var task = ItemSelectionBox.Show(this.buttonResultItem, this.recipeViewModel!.ResultItemID);
+
+                await task;
+
+                if (task.Result.result == DialogResult.OK)
+                {
+                    this.recipeViewModel.ResultItemID = task.Result.value!.id;
+                    this.buttonResultItem.Text = task.Result.value!.Name;
+                }
+            };
 
             this.numericUpDownLevel.ValueChanged += (_, _) =>
             {
@@ -46,17 +55,21 @@ namespace RF5_CustomRecipeEditor
                 this.recipeViewModel!.Level = (byte)this.numericUpDownLevel.Value;
             };
 
-            for (int i = 0; i < this.materialComboBoxes.Length; i++)
+            for (int i = 0; i < this.materialbuttons.Length; i++)
             {
                 var index = i;
-                var comboBox = this.materialComboBoxes[i];
-                comboBox.DataSource = ItemDataTable.Instance.Items;
-                comboBox.SelectedIndexChanged += (_, _) =>
+                var button = this.materialbuttons[i];
+                button.Click += async (_, _) =>
                 {
-                    if (initailzing)
-                        return;
+                    var task = ItemSelectionBox.Show(button, this.recipeViewModel!.GetMaterial(index)?.id ?? 0);
 
-                    this.recipeViewModel!.SetMaterial(index, (ItemDataRow)comboBox.SelectedItem);
+                    await task;
+
+                    if (task.Result.result == DialogResult.OK)
+                    {
+                        this.recipeViewModel.SetMaterial(index, task.Result.value!);
+                        button.Text = task.Result.value!.Name;
+                    }
                 };
             }
         }
@@ -70,15 +83,15 @@ namespace RF5_CustomRecipeEditor
                 this.recipeViewModel = recipeViewModel;
 
                 this.comboBoxCategory.SelectedItem = recipeViewModel.CraftCategoryId;
-                this.comboBoxResultItem.SelectedIndex = ItemDataTable.Instance.IndexOf(recipeViewModel.ResultItemID);
+                this.buttonResultItem.Text = ItemDataTable.Instance.Get(recipeViewModel.ResultItemID)?.Name ?? string.Empty;
                 this.numericUpDownLevel.Value = recipeViewModel.Level;
 
                 int i = 0;
                 for (; i < recipeViewModel.MaterialCount; i++)
-                    this.materialComboBoxes[i].SelectedIndex = ItemDataTable.Instance.IndexOf(recipeViewModel.GetMaterial(i)?.id ?? 0);
+                    this.materialbuttons[i].Text = recipeViewModel.GetMaterial(i)?.Name ?? string.Empty;
 
                 for (; i < 6; i++)
-                    this.materialComboBoxes[i].SelectedIndex = 0;
+                    this.materialbuttons[i].Text = string.Empty;
             }
             finally
             {

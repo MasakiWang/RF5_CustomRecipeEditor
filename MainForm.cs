@@ -1,13 +1,16 @@
 using CommunityToolkit.Mvvm.Input;
-using System.Security.Cryptography;
 
 namespace RF5_CustomRecipeEditor
 {
+    using TRecipeControl = RecipeControlv2;
+
     public partial class MainForm : Form
     {
+        public static MainForm? Instance { get; private set; }
+
         string currentRecipeFilePath = string.Empty;
         RecipeAddButton recipeAddButton;
-        List<RecipeControl> recipeControls = new List<RecipeControl>();
+        List<TRecipeControl> recipeControls = new List<TRecipeControl>();
         MessageBox messageBox = new MessageBox();
 
         public MainForm()
@@ -32,25 +35,29 @@ namespace RF5_CustomRecipeEditor
             this.newToolStripMenuItem.Command = new RelayCommand(NewRecipe);
 
             this.Text = "Untitled recipe";
+
+            Instance = this;
         }
 
         void ClearRecipe()
         {
             flowLayoutPanelRecipes.SuspendLayout();
-            foreach (var c in flowLayoutPanelRecipes.Controls.OfType<RecipeControl>())
+            foreach (var c in flowLayoutPanelRecipes.Controls.OfType<TRecipeControl>())
                 c.Visible = false;
             flowLayoutPanelRecipes.ResumeLayout();
         }
 
         void CreateRecipeControl()
         {
+#if USE_V1
             Task.Run(async () =>
             {
                 await Task.Delay(100);
 
-                this.Invoke(() =>
+                this.Invoke((Delegate)(() =>
                 {
-                    var newControl = new RecipeControl();
+#endif
+                    var newControl = new TRecipeControl();
                     newControl.ClickDuplicate += (_, recipe) =>
                     {
                         var newRecipe = recipe.Clone();
@@ -66,10 +73,12 @@ namespace RF5_CustomRecipeEditor
                     flowLayoutPanelRecipes.Controls.Add(newControl);
 
                     messageBox.Hide();
-                });
+#if USE_V1
+                }));
             });
 
             messageBox.ShowDialog("Initialing comboxes...");
+#endif
         }
 
         static Recipe[] tmpArray = new Recipe[1];
@@ -105,7 +114,7 @@ namespace RF5_CustomRecipeEditor
             flowLayoutPanelRecipes.ResumeLayout();
         }
 
-        void RemoveRecipe(RecipeControl sender, Recipe args)
+        void RemoveRecipe(TRecipeControl sender, Recipe args)
         {
             flowLayoutPanelRecipes.SuspendLayout();
 
@@ -142,7 +151,9 @@ namespace RF5_CustomRecipeEditor
                 {
                     using (var sfd = new SaveFileDialog())
                     {
-                        sfd.FileName = currentRecipeFilePath;
+                        sfd.FileName = Path.GetFileName(currentRecipeFilePath);
+                        //sfd.InitialDirectory = Path.GetDirectoryName(currentRecipeFilePath);
+                        sfd.RestoreDirectory = true;
                         sfd.Filter = "(*.json)|*.json";
 
                         if (DialogResult.OK != sfd.ShowDialog())
@@ -161,7 +172,9 @@ namespace RF5_CustomRecipeEditor
         {
             using (var ofd = new OpenFileDialog())
             {
-                ofd.FileName = currentRecipeFilePath;
+                ofd.FileName = Path.GetFileName(currentRecipeFilePath);
+                //ofd.InitialDirectory = Path.GetDirectoryName(currentRecipeFilePath);
+                ofd.RestoreDirectory = true;
                 ofd.Filter = "(*.json)|*.json";
 
                 if (DialogResult.OK != ofd.ShowDialog())
