@@ -7,7 +7,7 @@ namespace RF5_CustomRecipeEditor
 {
     public sealed class ItemDataTable
     {
-        private static ItemDataTable instance;
+        private static ItemDataTable? instance = null;
         public static ItemDataTable Instance
         {
             get
@@ -42,8 +42,8 @@ namespace RF5_CustomRecipeEditor
                     if (!csvReader.ReadHeader())
                         throw new Exception();
 
-                    itemsDict = csvReader.GetRecords<ItemDataRow>().ToImmutableDictionary(x => x.id);
-                    itemsArray = itemsDict.Values.ToImmutableArray();
+                    itemsArray = csvReader.GetRecords<ItemDataRow>().OrderBy(x => x.id).ToImmutableArray();
+                    itemsDict = itemsArray.ToImmutableDictionary(x => x.id);
                 }
             }
 
@@ -54,7 +54,13 @@ namespace RF5_CustomRecipeEditor
 
         public bool Contains (ushort id) => itemsDict.ContainsKey(id);
 
-        public ItemDataRow Get(ushort id) => itemsDict[id];
+        public ItemDataRow? Get(ushort id)
+        {
+            if (itemsDict.TryGetValue(id, out var value))
+                return value;
+
+            return null;
+        }
 
         public int IndexOf(ushort id)
         {

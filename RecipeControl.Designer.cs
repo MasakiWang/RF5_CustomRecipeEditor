@@ -46,12 +46,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBoxResultItem = new System.Windows.Forms.ComboBox();
+            this.buttonRemove = new System.Windows.Forms.Button();
+            this.buttonDuplicate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxCategory
             // 
-            this.comboBoxCategory.FormattingEnabled = true;
+            this.comboBoxCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCategory.Location = new System.Drawing.Point(83, 32);
             this.comboBoxCategory.Name = "comboBoxCategory";
             this.comboBoxCategory.Size = new System.Drawing.Size(228, 23);
@@ -59,49 +61,49 @@
             // 
             // comboBoxMaterial1
             // 
-            this.comboBoxMaterial1.FormattingEnabled = true;
+            this.comboBoxMaterial1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMaterial1.Location = new System.Drawing.Point(83, 90);
             this.comboBoxMaterial1.Name = "comboBoxMaterial1";
             this.comboBoxMaterial1.Size = new System.Drawing.Size(228, 23);
             this.comboBoxMaterial1.TabIndex = 1;
             // 
-            // comboBoxMateria2
+            // comboBoxMaterial2
             // 
-            this.comboBoxMaterial2.FormattingEnabled = true;
+            this.comboBoxMaterial2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMaterial2.Location = new System.Drawing.Point(83, 119);
-            this.comboBoxMaterial2.Name = "comboBoxMateria2";
+            this.comboBoxMaterial2.Name = "comboBoxMaterial2";
             this.comboBoxMaterial2.Size = new System.Drawing.Size(228, 23);
             this.comboBoxMaterial2.TabIndex = 2;
             // 
-            // comboBoxMateria3
+            // comboBoxMaterial3
             // 
-            this.comboBoxMaterial3.FormattingEnabled = true;
+            this.comboBoxMaterial3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMaterial3.Location = new System.Drawing.Point(83, 148);
-            this.comboBoxMaterial3.Name = "comboBoxMateria3";
+            this.comboBoxMaterial3.Name = "comboBoxMaterial3";
             this.comboBoxMaterial3.Size = new System.Drawing.Size(228, 23);
             this.comboBoxMaterial3.TabIndex = 3;
             // 
-            // comboBoxMateria4
+            // comboBoxMaterial4
             // 
-            this.comboBoxMaterial4.FormattingEnabled = true;
+            this.comboBoxMaterial4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMaterial4.Location = new System.Drawing.Point(83, 177);
-            this.comboBoxMaterial4.Name = "comboBoxMateria4";
+            this.comboBoxMaterial4.Name = "comboBoxMaterial4";
             this.comboBoxMaterial4.Size = new System.Drawing.Size(228, 23);
             this.comboBoxMaterial4.TabIndex = 4;
             // 
-            // comboBoxMateria5
+            // comboBoxMaterial5
             // 
-            this.comboBoxMaterial5.FormattingEnabled = true;
+            this.comboBoxMaterial5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMaterial5.Location = new System.Drawing.Point(83, 206);
-            this.comboBoxMaterial5.Name = "comboBoxMateria5";
+            this.comboBoxMaterial5.Name = "comboBoxMaterial5";
             this.comboBoxMaterial5.Size = new System.Drawing.Size(228, 23);
             this.comboBoxMaterial5.TabIndex = 5;
             // 
-            // comboBoxMateria6
+            // comboBoxMaterial6
             // 
-            this.comboBoxMaterial6.FormattingEnabled = true;
+            this.comboBoxMaterial6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMaterial6.Location = new System.Drawing.Point(83, 235);
-            this.comboBoxMaterial6.Name = "comboBoxMateria6";
+            this.comboBoxMaterial6.Name = "comboBoxMaterial6";
             this.comboBoxMaterial6.Size = new System.Drawing.Size(228, 23);
             this.comboBoxMaterial6.TabIndex = 6;
             // 
@@ -211,16 +213,38 @@
             // 
             // comboBoxResultItem
             // 
-            this.comboBoxResultItem.FormattingEnabled = true;
+            this.comboBoxResultItem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxResultItem.Location = new System.Drawing.Point(83, 3);
             this.comboBoxResultItem.Name = "comboBoxResultItem";
             this.comboBoxResultItem.Size = new System.Drawing.Size(228, 23);
             this.comboBoxResultItem.TabIndex = 16;
             // 
+            // buttonRemove
+            // 
+            this.buttonRemove.Location = new System.Drawing.Point(236, 264);
+            this.buttonRemove.Name = "buttonRemove";
+            this.buttonRemove.Size = new System.Drawing.Size(75, 23);
+            this.buttonRemove.TabIndex = 18;
+            this.buttonRemove.Text = "Remove";
+            this.buttonRemove.UseVisualStyleBackColor = true;
+            this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click);
+            // 
+            // buttonDuplicate
+            // 
+            this.buttonDuplicate.Location = new System.Drawing.Point(155, 264);
+            this.buttonDuplicate.Name = "buttonDuplicate";
+            this.buttonDuplicate.Size = new System.Drawing.Size(75, 23);
+            this.buttonDuplicate.TabIndex = 19;
+            this.buttonDuplicate.Text = "Duplicate";
+            this.buttonDuplicate.UseVisualStyleBackColor = true;
+            this.buttonDuplicate.Click += new System.EventHandler(this.buttonDuplicate_Click);
+            // 
             // RecipeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonDuplicate);
+            this.Controls.Add(this.buttonRemove);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.comboBoxResultItem);
             this.Controls.Add(this.label8);
@@ -239,10 +263,10 @@
             this.Controls.Add(this.comboBoxMaterial2);
             this.Controls.Add(this.comboBoxMaterial1);
             this.Controls.Add(this.comboBoxCategory);
-            this.MaximumSize = new System.Drawing.Size(314, 265);
-            this.MinimumSize = new System.Drawing.Size(314, 265);
+            this.MaximumSize = new System.Drawing.Size(314, 292);
+            this.MinimumSize = new System.Drawing.Size(314, 292);
             this.Name = "RecipeControl";
-            this.Size = new System.Drawing.Size(314, 265);
+            this.Size = new System.Drawing.Size(314, 292);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -269,5 +293,7 @@
         private Label label8;
         private Label label9;
         private ComboBox comboBoxResultItem;
+        private Button buttonRemove;
+        private Button buttonDuplicate;
     }
 }

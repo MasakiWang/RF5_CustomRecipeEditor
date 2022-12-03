@@ -29,7 +29,7 @@
 
         public int MaterialCount => Recipe.IngredientItemIDs.Count;
 
-        public ItemDataRow GetMaterial(int index)
+        public ItemDataRow? GetMaterial(int index)
         {
             if (6 <= index || 0 > index)
                 throw new IndexOutOfRangeException();
@@ -42,10 +42,10 @@
 
         public void SetMaterial(int index, ItemDataRow itemData)
         {
-            if (6 > index || 0 > index)
+            if (6 <= index || 0 > index)
                 throw new IndexOutOfRangeException();
 
-            while (Recipe.IngredientItemIDs.Count > index)
+            while (index >= Recipe.IngredientItemIDs.Count)
                 Recipe.IngredientItemIDs.Add(0);
 
             Recipe.IngredientItemIDs[index] = itemData.id;

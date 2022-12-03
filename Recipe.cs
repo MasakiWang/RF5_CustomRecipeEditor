@@ -27,4 +27,15 @@ public sealed class Recipe
 
     [JsonProperty]
     public byte SkillLevel { get; set; } = 1;
+
+    public Recipe Clone()
+    {
+        return new Recipe()
+        {
+            CraftCategoryId = CraftCategoryId,
+            ResultItemID = ResultItemID,
+            IngredientItemIDs = new List<ushort>(IngredientItemIDs),
+            SkillLevel = SkillLevel,
+        };
+    }
 }
